@@ -1,11 +1,10 @@
 package raisetech.Student.Management.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import raisetech.Student.Management.data.Student;
-import raisetech.Student.Management.data.StudentCourse;
+import raisetech.Student.Management.data.StudentsCourses;
 import raisetech.Student.Management.repository.StudentRepository;
 
 @Service
@@ -25,7 +24,7 @@ public class StudentService {
         .toList();
   }
 
-  public List<StudentCourse> searchStudentCourseList() {
+  public List<StudentsCourses> searchStudentCourseList() {
     return repository.studentCourseListsearch()
         .stream()
         .filter(v -> "Java基礎コース".equals(v.getCourseName()))
