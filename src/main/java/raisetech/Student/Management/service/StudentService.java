@@ -18,17 +18,10 @@ public class StudentService {
   }
 
   public List<Student> searchStudentList() {
-    return repository.studentListsearch()
-        .stream()
-        .filter(v -> v.getAge() >= 30 && v.getAge() <= 39)
-        .toList();
+    return repository.studentListsearch();
   }
 
   public List<StudentsCourses> searchStudentCourseList() {
-    return repository.studentCourseListsearch()
-        .stream()
-        .filter(v -> "Java基礎コース".equals(v.getCourseName()))
-        .toList();
+    return repository.studentCourseListsearch();
   }
-  
 }
