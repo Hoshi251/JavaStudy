@@ -1,22 +1,23 @@
 package raisetech.Student.Management.contoroller;
 
 import java.util.ArrayList;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 import raisetech.Student.Management.contoroller.converter.StudentConverter;
 import raisetech.Student.Management.data.Student;
 import raisetech.Student.Management.data.StudentsCourses;
 import raisetech.Student.Management.domain.StudentDetail;
 import raisetech.Student.Management.service.StudentService;
 
-@Controller
+@RestController
 public class StudentController {
 
   private final StudentService service;
@@ -29,19 +30,10 @@ public class StudentController {
   }
 
   @GetMapping("/studentList")
-  public String getStudentList(Model model) {
+  public List<StudentDetail> getStudentList() {
     List<Student> students = service.searchStudentList();
     List<StudentsCourses> studentsCourses = service.searchStudentCourseList();
-
-    model.addAttribute("studentList",converter.convertStudentDetails(students,studentsCourses));
-    return "studentList";
-  }
-
-  @GetMapping("/student/{studentNo}")
-  public String getStudent(@PathVariable Integer studentNo, Model model) {
-    StudentDetail studentDetail = service.searchStudent(studentNo);
-    model.addAttribute("studentDetail", studentDetail);
-    return "updateStudent";
+    return converter.convertStudentDetails(students,studentsCourses);
   }
 
   //htmlで使える箱を作ってhtml画面を表示させる処理
@@ -79,11 +71,8 @@ public class StudentController {
   }
 
     @PostMapping("/updateStudent")
-    public String updateStudent (@ModelAttribute StudentDetail studentDetail, BindingResult result){
-      if (result.hasErrors()) {
-        return "updateStudent";
-      }
+    public ResponseEntity<String> updateStudent (@RequestBody StudentDetail studentDetail){
       service.updateStudent(studentDetail);
-      return "redirect:/studentList";
+      return ResponseEntity.ok("更新処理が成功しました");
     }
   }
