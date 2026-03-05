@@ -1,6 +1,5 @@
 package raisetech.Student.Management.service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -24,6 +23,16 @@ public class StudentService {
 
   public List<Student> searchStudentList() {
     return repository.studentListsearch();
+  }
+
+  @Transactional
+  public StudentDetail searchStudent(Integer studentNo) {
+    Student student = repository.searchStudent(studentNo);
+    List<StudentsCourses> studentsCourses = repository.studentsCoursesearch(student.getStudentNo());
+    StudentDetail studentDetail = new StudentDetail();
+    studentDetail.setStudent(student);
+    studentDetail.setStudentCourse(studentsCourses);
+    return studentDetail;
   }
 
   public List<StudentsCourses> searchStudentCourseList() {
@@ -56,6 +65,18 @@ public class StudentService {
       c.setEndDate(LocalDateTime.now().plusYears(1));
 
       repository.registerStudentCourse(c);
+    }
+  }
+
+  @Transactional
+  public void updateStudent(StudentDetail studentDetail) {
+
+    // ① students 登録
+    repository.updateStudent(studentDetail.getStudent());
+
+    // ② courses 登録
+    for (StudentsCourses c : studentDetail.getStudentCourse()) {
+      repository.updateStudentCourse(c);
     }
   }
 }
