@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import raisetech.Student.Management.contoroller.converter.StudentConverter;
 import raisetech.Student.Management.data.Student;
@@ -36,9 +37,11 @@ public class StudentController {
     return "studentList";
   }
 
-  @GetMapping("/studentCourseList")
-  public List<StudentsCourses> getStudentCourseList() {
-    return service.searchStudentCourseList();
+  @GetMapping("/student/{studentNo}")
+  public String getStudent(@PathVariable Integer studentNo, Model model) {
+    StudentDetail studentDetail = service.searchStudent(studentNo);
+    model.addAttribute("studentDetail", studentDetail);
+    return "updateStudent";
   }
 
   //htmlで使える箱を作ってhtml画面を表示させる処理
@@ -65,7 +68,7 @@ public class StudentController {
   //htmlで取得した情報をjavaに持ってきて、エラーかどうかを確認する処理
   public String registerStudent(@ModelAttribute StudentDetail studentDetail, BindingResult result) {
 
-    if(result.hasErrors()) {
+    if (result.hasErrors()) {
       return "registerStudent";
     }
     //serviceクラスのregisterstudentメソッドを実行する、引数にstudentDetailを渡してね！
@@ -75,4 +78,12 @@ public class StudentController {
     return "redirect:/studentList";
   }
 
-}
+    @PostMapping("/updateStudent")
+    public String updateStudent (@ModelAttribute StudentDetail studentDetail, BindingResult result){
+      if (result.hasErrors()) {
+        return "updateStudent";
+      }
+      service.updateStudent(studentDetail);
+      return "redirect:/studentList";
+    }
+  }
