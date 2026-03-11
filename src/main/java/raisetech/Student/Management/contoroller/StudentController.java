@@ -1,78 +1,84 @@
 package raisetech.Student.Management.contoroller;
 
-import java.util.ArrayList;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Size;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.Mapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import raisetech.Student.Management.contoroller.converter.StudentConverter;
-import raisetech.Student.Management.data.Student;
-import raisetech.Student.Management.data.StudentsCourses;
 import raisetech.Student.Management.domain.StudentDetail;
 import raisetech.Student.Management.service.StudentService;
 
+/**
+ * 受講生の検索や登録、更新などを行うREST APOとして実行されるControllerです。
+ */
+@Validated
 @RestController
 public class StudentController {
 
+  // StudentServiceオブジェクトを入れる箱
+  // StudentConverterオブジェクトを入れる箱
   private final StudentService service;
-  private final StudentConverter converter;
 
+
+  //@Autowiredはインスタンス生成をしている
+  // StudentControllerでserviceとconverterを使えるようにするやつ
   @Autowired
-  public StudentController(StudentService service, StudentConverter converter) {
+  public StudentController(StudentService service) {
     this.service = service;
-    this.converter = converter;
   }
 
+  /**
+   * 受講生詳細の一覧検索です。
+   * 全件検索を行うので、条件指定は行いません。
+   *
+   * @return 受講生詳細一覧(全件)
+   */
   @GetMapping("/studentList")
   public List<StudentDetail> getStudentList() {
-    List<Student> students = service.searchStudentList();
-    List<StudentsCourses> studentsCourses = service.searchStudentCourseList();
-    return converter.convertStudentDetails(students,studentsCourses);
+    return service.searchStudentList();
   }
 
-  //htmlで使える箱を作ってhtml画面を表示させる処理
-  @GetMapping("/newStudent")
-  public String newStudent(Model model) {
-    StudentDetail studentDetail = new StudentDetail();
-    studentDetail.setStudent(new Student());
-
-    List<StudentsCourses> list = new ArrayList<>();
-    list.add(new StudentsCourses());
-    list.add(new StudentsCourses());
-    studentDetail.setStudentCourse(list);
-
-    //html側の箱:studentDetail、java側の箱:studentDetail
-    //studetnDetail == dtudetnDetail、同じ名前でもいいんかい
-    //インスタンス生成をしているのでstudentDetailでもいける
-    model.addAttribute("studentDetail", studentDetail);
-    //registerSudent.htmlを表示させる、飛ぶ
-    return "registerStudent";
+  /**
+   * 受講生詳細の検索です。
+   * IDに紐づく任意の受講生の情報を取得します。
+   *
+   * @param studentNo 受講生ID
+   * @return 受講生
+   */
+  @GetMapping("/student/{studentNo}")
+  public StudentDetail getStudent(@PathVariable @Min(1) @Max(100) Integer studentNo) {
+    return service.searchStudent(studentNo);
   }
 
-  //データを「変更する処理」
+  /**
+   * 受講生詳細の登録を行います。
+   * @param studentDetail 受講生詳細
+   * @return 実行結果
+   */
   @PostMapping("/registerStudent")
-  //htmlで取得した情報をjavaに持ってきて、エラーかどうかを確認する処理
-  public String registerStudent(@ModelAttribute StudentDetail studentDetail, BindingResult result) {
-
-    if (result.hasErrors()) {
-      return "registerStudent";
-    }
-    //serviceクラスのregisterstudentメソッドを実行する、引数にstudentDetailを渡してね！
-    service.registerStudent(studentDetail);
-    // ①新規受講生情報を登録する処理を実装する。
-    // ②コース情報も一緒に登録できるように実装する。コースは単体で良い。
-    return "redirect:/studentList";
+  public ResponseEntity<StudentDetail> registerStudent(@RequestBody StudentDetail studentDetail) {
+    StudentDetail responseStudentDetail = service.registerStudent(studentDetail);
+    return ResponseEntity.ok(responseStudentDetail);
   }
 
-    @PostMapping("/updateStudent")
-    public ResponseEntity<String> updateStudent (@RequestBody StudentDetail studentDetail){
-      service.updateStudent(studentDetail);
-      return ResponseEntity.ok("更新処理が成功しました");
-    }
+  /**
+   * 受講生詳細の更新を行います。キャンセルフラグの更新もここで行います(論理削除)
+   *
+   * @param studentDetail 受講生詳細
+   * @return 実行結果
+   */
+  @PutMapping("/updateStudent")
+  public ResponseEntity<String> updateStudent (@RequestBody StudentDetail studentDetail){
+    service.updateStudent(studentDetail);
+    return ResponseEntity.ok("更新処理が成功しました");
   }
+}
