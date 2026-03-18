@@ -1,5 +1,6 @@
 package raisetech.Student.Management.domain;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,6 +9,7 @@ import lombok.Setter;
 import raisetech.Student.Management.data.Student;
 import raisetech.Student.Management.data.StudentCourse;
 
+@Schema(description = "受講生詳細")
 @Getter
 @Setter
 @NoArgsConstructor
