@@ -85,7 +85,7 @@ public class StudentService {
    * @param studentCourse 受講生コース情報
    * @param studentNo 受講生ID
    */
-  private static void initStudentsCourses(StudentCourse studentCourse, Integer studentNo) {
+  public void initStudentsCourses(StudentCourse studentCourse, Integer studentNo) {
     studentCourse.setStudentNo(studentNo);
     studentCourse.setId(UUID.randomUUID().toString());
     LocalDateTime now = LocalDateTime.now();
