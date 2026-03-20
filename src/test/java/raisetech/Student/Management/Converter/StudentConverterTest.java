@@ -26,8 +26,8 @@ public class StudentConverterTest {
     Student student = createStudent();
 
     StudentCourse studentCourse = new StudentCourse();
-    studentCourse.setId("7c783e13-dba2-4c05-86df-d1c6e012c8e4");
-    studentCourse.setStudentNo(1);
+    studentCourse.setCourseId(1);
+    studentCourse.setStudentId(1);
     studentCourse.setCourseName("Javaコース");
     studentCourse.setStartDate(LocalDateTime.now());
     studentCourse.setEndDate(LocalDateTime.now().plusYears(1));
@@ -48,8 +48,8 @@ public class StudentConverterTest {
     Student student = createStudent();
 
     StudentCourse studentCourse = new StudentCourse();
-    studentCourse.setId("7c783e13-dba2-4c05-86df-d1c6e012c8e4");
-    studentCourse.setStudentNo(2);
+    studentCourse.setCourseId(1);
+    studentCourse.setStudentId(1);
     studentCourse.setCourseName("Javaコース");
     studentCourse.setStartDate(LocalDateTime.now());
     studentCourse.setEndDate(LocalDateTime.now().plusYears(1));
