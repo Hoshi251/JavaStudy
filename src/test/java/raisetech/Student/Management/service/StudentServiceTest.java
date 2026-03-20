@@ -53,23 +53,23 @@ class StudentServiceTest {
   @Test
   void 受講生詳細検索_リポジトリの処理が適切に呼び出せていること() {
     // 準備
-    Integer studentNo = 999;
+    Integer studentId = 999;
     Student student = new Student();
-    student.setStudentNo(studentNo);
+    student.setStudentId(studentId);
 
     List<StudentCourse> studentCourses = new ArrayList<>();
     StudentCourse studentCourse = new StudentCourse();
-    studentCourse.setStudentNo(studentNo);
+    studentCourse.setStudentId(studentId);
     studentCourses.add(studentCourse);
 
-    when(repository.studentSearch(studentNo)).thenReturn(student);
-    when(repository.studentCourseSearch(studentNo)).thenReturn(studentCourses);
+    when(repository.studentSearch(studentId)).thenReturn(student);
+    when(repository.studentCourseSearch(studentId)).thenReturn(studentCourses);
 
     // 実行
-    StudentDetail actual = sut.searchStudent(studentNo);
+    StudentDetail actual = sut.searchStudent(studentId);
 
-    verify(repository, times(1)).studentSearch(studentNo);
-    verify(repository, times(1)).studentCourseSearch(studentNo);
+    verify(repository, times(1)).studentSearch(studentId);
+    verify(repository, times(1)).studentCourseSearch(studentId);
   }
 
   @Test
@@ -92,12 +92,12 @@ class StudentServiceTest {
   void 受講生詳細の登録_初期化処理が行われること() {
     Integer studentNo = 999;
     Student student = new Student();
-    student.setStudentNo(studentNo);
+    student.setStudentId(studentNo);
     StudentCourse studentCourse = new StudentCourse();
 
-    sut.initStudentsCourses(studentCourse,student.getStudentNo());
+    sut.initStudentsCourses(studentCourse,student.getStudentId());
 
-    Assertions.assertEquals(studentNo,studentCourse.getStudentNo());
+    Assertions.assertEquals(studentNo,studentCourse.getStudentId());
     Assertions.assertEquals(LocalDateTime.now().getHour(), studentCourse.getStartDate().getHour());
     Assertions.assertEquals(LocalDateTime.now().plusYears(1).getYear(), studentCourse.getEndDate().getYear());
   }

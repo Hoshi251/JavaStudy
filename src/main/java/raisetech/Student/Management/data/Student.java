@@ -9,12 +9,10 @@ import lombok.Setter;
 @Getter
 @Setter
 
-// TODO : Studnt,stdentCourseの入力チェック
-
 public class Student {
 
   @Schema(description = "受講生ID",example = "1")
-  private Integer studentNo;
+  private Integer studentId;
 
   @NotBlank
   @Schema(description = "受講生名",example = "山田太郎")

@@ -43,13 +43,13 @@ public class StudentService {
   /**
    * 受講生詳細検索です。IDに紐づく受講生情報を取得した後、その受講生に紐づく受講生コース情報を取得して設定します。
    *
-   * @param studentNo 受講生ID
+   * @param studentId 受講生ID
    * @return 受講生詳細
    */
   @Transactional
-  public StudentDetail searchStudent(Integer studentNo) {
-    Student student = repository.studentSearch(studentNo);
-    List<StudentCourse> studentsCourse = repository.studentCourseSearch(student.getStudentNo());
+  public StudentDetail searchStudent(Integer studentId) {
+    Student student = repository.studentSearch(studentId);
+    List<StudentCourse> studentsCourse = repository.studentCourseSearch(student.getStudentId());
     return new StudentDetail(student, studentsCourse);
   }
 
@@ -66,14 +66,14 @@ public class StudentService {
     // ① students 登録
     Student student = studentDetail.getStudent();
     repository.registerStudent(student);
-    Integer studentNo = student.getStudentNo();
+    Integer studentId = student.getStudentId();
 
     // ② courses 登録
     for (StudentCourse studentCourse : studentDetail.getStudentCourseList()) {
       if (studentCourse.getCourseName() == null || studentCourse.getCourseName().isBlank()) {
         continue;
       }
-      initStudentsCourses(studentCourse, studentNo);
+      initStudentsCourses(studentCourse, studentId);
       repository.registerStudentCourse(studentCourse);
     }
     return studentDetail;
@@ -83,11 +83,10 @@ public class StudentService {
    *受講生コース登録時の初期設定処理
    *
    * @param studentCourse 受講生コース情報
-   * @param studentNo 受講生ID
+   * @param studentId 受講生ID
    */
-  public void initStudentsCourses(StudentCourse studentCourse, Integer studentNo) {
-    studentCourse.setStudentNo(studentNo);
-    studentCourse.setId(UUID.randomUUID().toString());
+  public void initStudentsCourses(StudentCourse studentCourse, Integer studentId) {
+    studentCourse.setStudentId(studentId);
     LocalDateTime now = LocalDateTime.now();
 
     studentCourse.setStartDate(now);

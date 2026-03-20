@@ -23,7 +23,7 @@ class StudentRepositoryTest {
   @Test
   void 受講生の登録が行えること() {
     Student student = new Student();
-    student.setStudentNo(10);
+    student.setStudentId(10);
     student.setStudentName("田中英和");
     student.setFurigana("タナカヒデカズ");
     student.setNickname("タナカ");

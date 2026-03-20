@@ -10,18 +10,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validation;
-import jakarta.validation.Validator;
 import java.util.List;
-import java.util.Set;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -53,7 +45,7 @@ class StudentControllerTest {
     Integer studentNo = 99;
 
     Student student = new Student();
-    student.setStudentNo(studentNo);
+    student.setStudentId(studentNo);
 
     StudentDetail detail = new StudentDetail();
     detail.setStudent(student);
@@ -142,7 +134,7 @@ class StudentControllerTest {
   @Test
   void 受講生詳細の受講生IDで適切な値を入力したときに入力チェックに異常が発生しないこと() throws Exception {
     Student student = new Student();
-    student.setStudentNo(1);
+    student.setStudentId(1);
 
     StudentDetail detail = new StudentDetail();
     detail.setStudent(student);

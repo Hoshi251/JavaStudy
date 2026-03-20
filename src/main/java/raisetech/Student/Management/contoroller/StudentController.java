@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import raisetech.Student.Management.data.Status;
 import raisetech.Student.Management.domain.StudentDetail;
 import raisetech.Student.Management.service.StudentService;
 
@@ -51,16 +53,16 @@ public class StudentController {
    * 受講生詳細の検索です。
    * IDに紐づく任意の受講生の情報を取得します。
    *
-   * @param studentNo 受講生ID
+   * @param studentId 受講生ID
    * @return 受講生
    */
   @Operation(summary = "受講生検索", description = "受講生IDを指定して受講生情報を取得します。")
   @ApiResponses({@ApiResponse(responseCode = "200", description = "取得成功"),
       @ApiResponse(responseCode = "400", description = "リクエスト不正"),
       @ApiResponse(responseCode = "600", description = "該当データなし")})
-  @GetMapping("/student/{studentNo}")
-  public StudentDetail getStudent(@PathVariable @Min(1) @Max(100) Integer studentNo) {
-    return service.searchStudent(studentNo);
+  @GetMapping("/student/{studentId}")
+  public StudentDetail getStudent(@PathVariable @Min(1) @Max(100) Integer studentId) {
+    return service.searchStudent(studentId);
   }
 
   /**
