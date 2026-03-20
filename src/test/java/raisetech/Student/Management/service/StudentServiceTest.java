@@ -55,7 +55,7 @@ class StudentServiceTest {
     // 準備
     Integer studentNo = 999;
     Student student = new Student();
-    student.setStudentNo(studentNo);
+    student.setStudentId(studentNo);
 
     List<StudentCourse> studentCourses = new ArrayList<>();
     StudentCourse studentCourse = new StudentCourse();
@@ -92,10 +92,10 @@ class StudentServiceTest {
   void 受講生詳細の登録_初期化処理が行われること() {
     Integer studentNo = 999;
     Student student = new Student();
-    student.setStudentNo(studentNo);
+    student.setStudentId(studentNo);
     StudentCourse studentCourse = new StudentCourse();
 
-    sut.initStudentsCourses(studentCourse,student.getStudentNo());
+    sut.initStudentsCourses(studentCourse,student.getStudentId());
 
     Assertions.assertEquals(studentNo,studentCourse.getStudentNo());
     Assertions.assertEquals(LocalDateTime.now().getHour(), studentCourse.getStartDate().getHour());

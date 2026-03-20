@@ -67,7 +67,7 @@ public class StudentConverterTest {
   @Nonnull
   private static Student createStudent() {
     Student student = new Student();
-    student.setStudentNo(1);
+    student.setStudentId(1);
     student.setStudentName("田中秀和");
     student.setFurigana("タナカヒデカズ");
     student.setNickname("タナカ");

@@ -1,29 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="raisetech.Student.Management.repository.StudentRepository" >
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="raisetech.Student.Management.repository.StudentRepository">
 
   <!-- 受講生の全件検索 -->
   <select id="studentListSearch" resultType="raisetech.Student.Management.data.Student">
     SELECT * FROM students
   </select>
 
-  <!-- 受講生の検索 -->
+  <!-- 受講生IDに紐づく受講生を検索 -->
   <select id="studentSearch" resultType="raisetech.Student.Management.data.Student">
-    SELECT * FROM students WHERE student_no = #{studentNo}
+    SELECT * FROM students WHERE student_id = #{studentId}
   </select>
 
-  <!-- 受講生のコース情報の全件検索 -->
+  <!-- 受講生コース情報の全件検索 -->
   <select id="studentCourseListSearch" resultType="raisetech.Student.Management.data.StudentCourse">
     SELECT * FROM students_courses
   </select>
 
   <!-- 受講生IDに紐づく受講生コース情報を検索 -->
   <select id="studentCourseSearch" resultType="raisetech.Student.Management.data.StudentCourse">
-    SELECT * FROM students_courses WHERE student_no = #{studentNo}
+    SELECT * FROM students_courses WHERE student_id = #{studentId}
   </select>
 
   <!-- 受講生の新規登録 -->
-  <insert id="registerStudent" useGeneratedKeys="true" keyProperty="studentNo" keyColumn="student_no">
+  <insert id="registerStudent" useGeneratedKeys="true" keyProperty="studentId" keyColumn="student_id">
     INSERT INTO students
     (student_name, furigana, nickname, email, city, age, gender, remark, is_deleted)
     VALUES
@@ -31,21 +32,36 @@
   </insert>
 
   <!-- 受講生コース情報の新規登録 -->
-  <insert id="registerStudentCourse">
+  <insert id="registerStudentCourse" useGeneratedKeys="true" keyProperty="courseId" keyColumn="course_id">
     INSERT INTO students_courses
-    (id, student_no, course_name, start_date, end_date)
+    (student_id, course_name, start_date, end_date)
     VALUES
-    (#{id}, #{studentNo}, #{courseName}, #{startDate}, #{endDate})
+    (#{studentId}, #{courseName}, #{startDate}, #{endDate})
   </insert>
 
   <!-- 受講生の更新 -->
   <update id="updateStudent">
-    UPDATE students SET student_name = #{studentName},furigana = #{furigana},nickname = #{nickname},
-    email =#{email},city = #{city},age = #{age},gender = #{gender},remark = #{remark},is_deleted = #{isDeleted} WHERE student_no = #{studentNo}
+    UPDATE students
+    SET student_name = #{studentName},
+    furigana = #{furigana},
+    nickname = #{nickname},
+    email = #{email},
+    city = #{city},
+    age = #{age},
+    gender = #{gender},
+    remark = #{remark},
+    is_deleted = #{isDeleted}
+    WHERE student_id = #{studentId}
   </update>
 
   <!-- 受講生コース情報の更新 -->
   <update id="updateStudentCourse">
-    UPDATE students_courses SET course_name = #{courseName} WHERE id = #{id}
+    UPDATE students_courses
+    SET student_id = #{studentId},
+    course_name = #{courseName},
+    start_date = #{startDate},
+    end_date = #{endDate}
+    WHERE course_id = #{courseId}
   </update>
+
 </mapper>
