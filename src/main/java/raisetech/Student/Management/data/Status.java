@@ -13,6 +13,6 @@ public class Status {
 
   private Integer statusId;
   private Integer courseId;
-  private Integer status;
+  private String status;
 
 }

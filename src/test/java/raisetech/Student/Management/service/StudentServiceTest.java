@@ -17,6 +17,7 @@ import raisetech.Student.Management.contoroller.converter.StudentConverter;
 import raisetech.Student.Management.data.Student;
 import raisetech.Student.Management.data.StudentCourse;
 import raisetech.Student.Management.domain.StudentDetail;
+import raisetech.Student.Management.domain.StudentSearchCondition;
 import raisetech.Student.Management.repository.StudentRepository;
 
 @ExtendWith(MockitoExtension.class)
@@ -28,24 +29,29 @@ class StudentServiceTest {
   @Mock
   private StudentConverter converter;
 
+  @Mock StatusService statusService;
+
   private StudentService sut;
 
   @BeforeEach
   void  before() {
-    sut = new StudentService(repository,converter);
+    sut = new StudentService(repository,converter,statusService);
   }
 
   @Test
   void 受講生詳細の一覧検索_リポジトリとコンバーターの処理が適切に呼び出せていること() {
+    StudentSearchCondition condition = new StudentSearchCondition();
     List<Student> studentList = new ArrayList<>();
     List<StudentCourse> studentCourseList = new ArrayList<>();
+    List<StudentDetail> studentDetails = new ArrayList<>();
 
-    when(repository.studentListSearch()).thenReturn(studentList);
+    when(repository.searchStudents(condition)).thenReturn(studentList);
     when(repository.studentCourseListSearch()).thenReturn(studentCourseList);
+    when(converter.convertStudentDetails(studentList, studentCourseList)).thenReturn(studentDetails);
 
-    sut.searchStudentList();
+    sut.searchStudentList(condition);
 
-    verify(repository, times(1)).studentListSearch();
+    verify(repository, times(1)).searchStudents(condition);
     verify(repository, times(1)).studentCourseListSearch();
     verify(converter, times(1)).convertStudentDetails(studentList, studentCourseList);
   }
@@ -114,4 +120,5 @@ class StudentServiceTest {
     verify(repository, times(1)).updateStudent(student);
     verify(repository, times(1)).updateStudentCourse(studentCourse);
   }
+
 }
