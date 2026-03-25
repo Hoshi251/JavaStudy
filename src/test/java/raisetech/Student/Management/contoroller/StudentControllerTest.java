@@ -1,7 +1,6 @@
 package raisetech.Student.Management.contoroller;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -9,7 +8,6 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.List;
@@ -33,13 +31,24 @@ class StudentControllerTest {
   private StudentService service;
 
   @Test
-  void 受講生詳細の一覧検索が実行できて空のリストが返ってくること() throws Exception {
+  void 受講生詳細の一覧検索が実行できること() throws Exception {
+    when(service.searchStudentList(any())).thenReturn(List.of());
+
     mockMvc.perform(get("/studentList"))
         .andExpect(status().isOk());
 
-    verify(service, times(1)).searchStudentList();
+    verify(service, times(1)).searchStudentList(any());
   }
 
+  @Test
+  void 条件を指定した受講生一覧検索が実行できること() throws Exception {
+    when(service.searchStudentList(any())).thenReturn(List.of());
+
+    mockMvc.perform(get("/studentList").param("city", "渋谷区"))
+        .andExpect(status().isOk());
+
+    verify(service, times(1)).searchStudentList(any());
+  }
   @Test
   void 受講生詳細の検索が実行できること() throws Exception {
     Integer studentNo = 99;
@@ -93,9 +102,9 @@ class StudentControllerTest {
   void 受講生詳細の更新が実行できて空で返ってくること() throws Exception {
     mockMvc.perform(put("/updateStudent").contentType(MediaType.APPLICATION_JSON).content(
             """
-            {
-                "student": {
-                    "studentNo": 10,
+                {
+                  "student": {
+                    "studentId": 10,
                     "studentName": "鴨葱鴨太郎",
                     "furigana": "カモネギカモタロウ",
                     "nickname": "カモ",
@@ -105,17 +114,17 @@ class StudentControllerTest {
                     "gender": "男性",
                     "remark": "",
                     "deleted": false
-                },
-                "studentCourseList": [
+                  },
+                  "studentCourseList": [
                     {
-                        "id": "7c783e13-dba2-4c05-86df-d1c6e012c8e4",
-                        "studentNo": 10,
-                        "courseName": "Javaコース",
-                        "startDate": "2026-03-11T00:00:00",
-                        "endDate": "2027-03-11T00:00:00"
+                      "courseId": 7,
+                      "studentId": 10,
+                      "courseName": "Javaコース",
+                      "startDate": "2026-03-11T00:00:00",
+                      "endDate": "2027-03-11T00:00:00"
                     }
-                ]
-            }
+                  ]
+                }
             
             
             """
@@ -147,4 +156,6 @@ class StudentControllerTest {
 
     verify(service, times(1)).searchStudent(1);
   }
+
+
 }

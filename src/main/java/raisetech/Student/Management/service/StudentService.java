@@ -2,14 +2,15 @@ package raisetech.Student.Management.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import raisetech.Student.Management.contoroller.converter.StudentConverter;
+import raisetech.Student.Management.data.Status;
 import raisetech.Student.Management.data.Student;
 import raisetech.Student.Management.data.StudentCourse;
 import raisetech.Student.Management.domain.StudentDetail;
+import raisetech.Student.Management.domain.StudentSearchCondition;
 import raisetech.Student.Management.repository.StudentRepository;
 
 /**
@@ -21,11 +22,13 @@ public class StudentService {
 
   private final StudentRepository repository;
   private final StudentConverter converter;
+  private final StatusService statusService;
 
   @Autowired
-  public StudentService(StudentRepository repository, StudentConverter converter) {
+  public StudentService(StudentRepository repository, StudentConverter converter, StatusService statusService) {
     this.repository = repository;
     this.converter = converter;
+    this.statusService = statusService;
   }
 
   /**
@@ -34,10 +37,17 @@ public class StudentService {
    *
    * @return  受講生詳細一覧(全件)
    */
-  public List<StudentDetail> searchStudentList() {
-    List<Student> studentList = repository.studentListSearch();
+  public List<StudentDetail> searchStudentList(StudentSearchCondition condition) {
+    List<Student> studentList = repository.searchStudents(condition);
     List<StudentCourse> studentCourseList = repository.studentCourseListSearch();
-    return converter.convertStudentDetails(studentList, studentCourseList);
+
+    List<StudentDetail> studentDetails = converter.convertStudentDetails(studentList, studentCourseList);
+
+    for (StudentDetail studentDetail : studentDetails) {
+      setDisplayStatus(studentDetail.getStudentCourseList());
+    }
+
+    return studentDetails;
   }
 
   /**
@@ -49,8 +59,9 @@ public class StudentService {
   @Transactional
   public StudentDetail searchStudent(Integer studentId) {
     Student student = repository.studentSearch(studentId);
-    List<StudentCourse> studentsCourse = repository.studentCourseSearch(student.getStudentId());
-    return new StudentDetail(student, studentsCourse);
+    List<StudentCourse> studentsCourses = repository.studentCourseSearch(student.getStudentId());
+    setDisplayStatus(studentsCourses);
+    return new StudentDetail(student, studentsCourses);
   }
 
   /**
@@ -105,6 +116,21 @@ public class StudentService {
     // ② courses 登録
     for (StudentCourse c : studentDetail.getStudentCourseList()) {
       repository.updateStudentCourse(c);
+    }
+  }
+
+  private void setDisplayStatus(List<StudentCourse> studentCourseList) {
+    for (StudentCourse studentCourse : studentCourseList) {
+      Status status = statusService.getStatus(studentCourse.getCourseId());
+
+      if (status != null) {
+        String displayStatus = statusService.decideDisplayStatus(
+            status.getStatus(),
+            studentCourse.getStartDate().toLocalDate(),
+            studentCourse.getEndDate().toLocalDate()
+        );
+        studentCourse.setDisplayStatus(displayStatus);
+      }
     }
   }
 }

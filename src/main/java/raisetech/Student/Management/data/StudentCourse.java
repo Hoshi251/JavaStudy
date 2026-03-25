@@ -25,4 +25,6 @@ public class StudentCourse {
 
   @Schema(description = "受講終了日",example = "2027-03-12T10:00:00")
   private LocalDateTime endDate;
+
+  private String displayStatus; // 画面表示用
 }

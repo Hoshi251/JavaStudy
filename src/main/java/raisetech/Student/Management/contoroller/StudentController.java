@@ -15,10 +15,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import raisetech.Student.Management.data.Status;
 import raisetech.Student.Management.domain.StudentDetail;
+import raisetech.Student.Management.domain.StudentSearchCondition;
 import raisetech.Student.Management.service.StudentService;
 
 /**
@@ -45,8 +44,8 @@ public class StudentController {
   @Operation(summary = "一覧検索", description = "受講生の一覧を検索します。")
   @ApiResponse(responseCode = "200", description = "取得成功")
   @GetMapping("/studentList")
-  public List<StudentDetail> getStudentList() {
-    return service.searchStudentList();
+  public List<StudentDetail> getStudentList(StudentSearchCondition condition) {
+    return service.searchStudentList(condition);
   }
 
   /**
@@ -94,4 +93,6 @@ public class StudentController {
     service.updateStudent(studentDetail);
     return ResponseEntity.ok("更新処理が成功しました");
   }
+
+
 }

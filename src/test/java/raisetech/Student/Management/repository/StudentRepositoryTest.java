@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import raisetech.Student.Management.data.Student;
+import raisetech.Student.Management.domain.StudentSearchCondition;
 
 @MybatisTest
 class StudentRepositoryTest {
@@ -39,5 +40,37 @@ class StudentRepositoryTest {
     List<Student> actual = sut.studentListSearch();
 
     assertThat(actual).hasSize(6);
+  }
+
+  @Test
+  void 条件指定で受講生を検索できること() {
+    // 条件
+    StudentSearchCondition condition = new StudentSearchCondition();
+    condition.setCity("渋谷区");
+
+    // 実行
+    List<Student> actual = sut.searchStudents(condition);
+
+    // 検証
+    assertThat(actual).isNotEmpty();
+
+    // 全員が「渋谷区」になっていること
+    for (Student student : actual) {
+      assertThat(student.getCity()).isEqualTo("渋谷区");
+    }
+  }
+
+  @Test
+  void 名前の部分一致で検索できること() {
+    StudentSearchCondition condition = new StudentSearchCondition();
+    condition.setStudentName("岩本");
+
+    List<Student> actual = sut.searchStudents(condition);
+
+    assertThat(actual).isNotEmpty();
+
+    for (Student student : actual) {
+      assertThat(student.getStudentName()).contains("岩本");
+    }
   }
 }

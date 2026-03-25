@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="raisetech.Student.Management.repository.StatusRepository">
+
+  <insert id="insertStatus"
+    parameterType="raisetech.Student.Management.data.Status"
+    useGeneratedKeys="true"
+    keyProperty="statusId"
+    keyColumn="status_id">
+    INSERT INTO status (course_id, status)
+    VALUES (#{courseId}, #{status})
+  </insert>
+
+  <select id="selectStatusByCourseId" parameterType="java.lang.Integer" resultType="raisetech.Student.Management.data.Status">
+    SELECT * FROM status WHERE course_id = #{courseId}
+  </select>
+
+  <update id="updateStatus" parameterType="raisetech.Student.Management.data.Status">
+    UPDATE status
+    SET status = #{status}
+    WHERE course_id = #{courseId}
+  </update>
+
+</mapper>

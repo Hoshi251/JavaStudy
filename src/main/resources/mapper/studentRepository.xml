@@ -23,6 +23,66 @@
     SELECT * FROM students_courses WHERE student_id = #{studentId}
   </select>
 
+  <select id="searchStudents"
+    parameterType="raisetech.Student.Management.domain.StudentSearchCondition"
+    resultType="raisetech.Student.Management.data.Student">
+    SELECT
+    student_id AS studentId,
+    student_name AS studentName,
+    furigana,
+    nickname,
+    email,
+    city,
+    age,
+    gender,
+    remark,
+    is_deleted AS deleted
+    FROM students
+    <where>
+      is_deleted = false
+
+      <if test="studentId != null">
+        AND student_id = #{studentId}
+      </if>
+
+      <if test="studentName != null and studentName != ''">
+        AND student_name LIKE CONCAT('%', #{studentName}, '%')
+      </if>
+
+      <if test="furigana != null and furigana != ''">
+        AND furigana LIKE CONCAT('%', #{furigana}, '%')
+      </if>
+
+      <if test="nickname != null and nickname != ''">
+        AND nickname LIKE CONCAT('%', #{nickname}, '%')
+      </if>
+
+      <if test="email != null and email != ''">
+        AND email LIKE CONCAT('%', #{email}, '%')
+      </if>
+
+      <if test="city != null and city != ''">
+        AND city = #{city}
+      </if>
+
+      <if test="age != null">
+        AND age = #{age}
+      </if>
+
+      <if test="gender != null and gender != ''">
+        AND gender = #{gender}
+      </if>
+
+      <if test="remark != null and remark != ''">
+        AND remark LIKE CONCAT('%', #{remark}, '%')
+      </if>
+
+      <if test="isDeleted != null">
+        AND is_deleted = #{isDeleted}
+      </if>
+    </where>
+  </select>
+
   <!-- 受講生の新規登録 -->
   <insert id="registerStudent" useGeneratedKeys="true" keyProperty="studentId" keyColumn="student_id">
     INSERT INTO students
