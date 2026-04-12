@@ -18,15 +18,15 @@ class StatusRepositoryTest {
   @Test
   void 申込状況を登録できる() {
     Status status = new Status();
-    status.setCourseId(7);
+    status.setCourseId(99);
     status.setStatus("仮申込");
 
     statusRepository.insertStatus(status);
 
-    Status actual = statusRepository.selectStatusByCourseId(7);
+    Status actual = statusRepository.selectStatusByCourseId(99);
 
     assertThat(actual).isNotNull();
-    assertThat(actual.getCourseId()).isEqualTo(7);
+    assertThat(actual.getCourseId()).isEqualTo(99);
     assertThat(actual.getStatus()).isEqualTo("仮申込");
   }
 
@@ -42,15 +42,15 @@ class StatusRepositoryTest {
   @Test
   void 申込状況を更新できる() {
     Status status = new Status();
-    status.setCourseId(7);
+    status.setCourseId(8);
     status.setStatus("仮申込");
 
     statusRepository.updateStatus(status);
 
-    Status actual = statusRepository.selectStatusByCourseId(7);
+    Status actual = statusRepository.selectStatusByCourseId(8);
 
     assertThat(actual).isNotNull();
-    assertThat(actual.getCourseId()).isEqualTo(7);
+    assertThat(actual.getCourseId()).isEqualTo(8);
     assertThat(actual.getStatus()).isEqualTo("仮申込");
   }
 }

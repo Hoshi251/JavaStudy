@@ -63,14 +63,14 @@ class StudentRepositoryTest {
   @Test
   void 名前の部分一致で検索できること() {
     StudentSearchCondition condition = new StudentSearchCondition();
-    condition.setStudentName("岩本");
+    condition.setStudentName("岩元");
 
     List<Student> actual = sut.searchStudents(condition);
 
     assertThat(actual).isNotEmpty();
 
     for (Student student : actual) {
-      assertThat(student.getStudentName()).contains("岩本");
+      assertThat(student.getStudentName()).contains("岩元");
     }
   }
 }

@@ -1,5 +1,4 @@
-CREATE TABLE IF NOT EXISTS students
-(
+CREATE TABLE IF NOT EXISTS students (
     student_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     student_name VARCHAR(100),
     furigana VARCHAR(100),
@@ -12,11 +11,16 @@ CREATE TABLE IF NOT EXISTS students
     is_deleted BOOLEAN NOT NULL
     );
 
-CREATE TABLE IF NOT EXISTS students_courses
-(
-    course_id INT NOT NULL PRIMARY KEY,
+CREATE TABLE IF NOT EXISTS students_courses (
+    course_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     student_id INT,
     course_name VARCHAR(100),
     start_date DATE,
     end_date DATE
-);
+    );
+
+CREATE TABLE IF NOT EXISTS status (
+     status_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+     course_id INT NOT NULL,
+     status VARCHAR(20) NOT NULL
+    );
