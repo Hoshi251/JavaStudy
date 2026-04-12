@@ -49,7 +49,7 @@ public class StudentConverterTest {
 
     StudentCourse studentCourse = new StudentCourse();
     studentCourse.setCourseId(1);
-    studentCourse.setStudentId(1);
+    studentCourse.setStudentId(999);
     studentCourse.setCourseName("Javaコース");
     studentCourse.setStartDate(LocalDateTime.now());
     studentCourse.setEndDate(LocalDateTime.now().plusYears(1));

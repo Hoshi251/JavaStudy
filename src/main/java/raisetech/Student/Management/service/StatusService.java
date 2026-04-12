@@ -30,6 +30,15 @@ public class StatusService {
   }
 
   public String decideDisplayStatus(String baseStatus, LocalDate startDate, LocalDate endDate) {
+
+    if (baseStatus == null) {
+      return null;
+    }
+
+    if (startDate == null || endDate == null) {
+      return baseStatus;
+    }
+
     LocalDate today = LocalDate.now();
 
     if ("仮申込".equals(baseStatus)) {
@@ -48,4 +57,5 @@ public class StatusService {
 
     return baseStatus;
   }
+
 }
