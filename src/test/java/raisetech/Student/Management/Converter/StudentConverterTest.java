@@ -39,8 +39,6 @@ public class StudentConverterTest {
 
     assertThat(actual.get(0).getStudent()).isEqualTo(student);
     assertThat(actual.get(0).getStudentCourseList()).isEqualTo(studentCourseList);
-
-
   }
 
   @Test

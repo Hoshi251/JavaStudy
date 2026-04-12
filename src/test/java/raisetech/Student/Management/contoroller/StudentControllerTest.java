@@ -157,5 +157,4 @@ class StudentControllerTest {
     verify(service, times(1)).searchStudent(1);
   }
 
-
 }
