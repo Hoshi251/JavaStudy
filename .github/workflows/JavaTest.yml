@@ -1,4 +1,3 @@
-
 name: Java CI with Gradle
 
 on:
@@ -58,19 +57,19 @@ jobs:
             echo "already exists Service File"
           else
             cat <<EOF | sudo tee -a /etc/systemd/system/StudentManagement.service
-          [ Unit ]
+          [Unit]
           Description = StudentManagement App
       
-          [ Service ]
-          ExecStart = java -jar ${DEST_PATH}
-          EnvironmentFile = /etc/sysconfig/StudentManagement
-          Restart = no
-          Type = simple
-          User = ec2-user
-          Group = ec2-user
-          SuccessExitStatus = 143
+          [Service]
+          ExecStart=java -jar ${DEST_PATH}
+          EnvironmentFile=/etc/sysconfig/StudentManagement
+          Restart=always
+          Type=simple
+          User=ec2-user
+          Group=ec2-user
+          SuccessExitStatus=143
       
-          [ Install ]
+          [Install]
           WantedBy = multi-user.target
           EOF
           fi
